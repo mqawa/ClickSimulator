@@ -28,7 +28,7 @@ dotnet run
 
 ## 下载与发布形态
 
-发布版本通过 GitHub Actions 在每次 **Release 发布时自动构建**（也可在 Actions 页面手动触发），产物附加到 Release 的 **Assets** 中。每个版本提供 **2 种架构 × 4 种形态**，按需选择：
+发布版本通过 GitHub Actions 在每次 **Release 发布时自动构建**（也可在 Actions 页面手动触发），产物附加到 Release 的 **Assets** 中。每个版本提供 **4 种形态**（Windows x64），按需选择：
 
 | 形态 | 文件 | 是否需要安装 .NET | 体积 | 适用场景 |
 | ---- | ---- | ---- | ---- | ---- |
