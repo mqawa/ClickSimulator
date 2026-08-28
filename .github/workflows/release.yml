@@ -11,9 +11,6 @@ permissions:
 jobs:
   build:
     runs-on: windows-latest
-    strategy:
-      matrix:
-        arch: [win-x64, win-arm64]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -21,48 +18,46 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 10.0.x
 
       # ---- 形态 1: 单文件自包含 (一个 exe，内置 .NET 运行时) ----
-      - name: Publish SingleFile SelfContained (${{ matrix.arch }})
+      - name: Publish SingleFile SelfContained
         run: |
-          dotnet publish ClickSimulator.csproj -c Release -r ${{ matrix.arch }} --self-contained true -p:PublishSingleFile=true -p:DebugType=None -p:DebugSymbols=false -o publish/single-self/${{ matrix.arch }}
+          dotnet publish ClickSimulator.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:DebugType=None -p:DebugSymbols=false -o publish/single-self
 
       # ---- 形态 2: 文件夹自包含 (多文件，内置运行时) ----
-      - name: Publish Folder SelfContained (${{ matrix.arch }})
+      - name: Publish Folder SelfContained
         run: |
-          dotnet publish ClickSimulator.csproj -c Release -r ${{ matrix.arch }} --self-contained true -p:DebugType=None -p:DebugSymbols=false -o publish/folder-self/${{ matrix.arch }}
+          dotnet publish ClickSimulator.csproj -c Release -r win-x64 --self-contained true -p:DebugType=None -p:DebugSymbols=false -o publish/folder-self
 
-      # ---- 形态 3: 单文件框架依赖 (体积最小，需装 .NET Desktop Runtime) ----
-      - name: Publish SingleFile FrameworkDependent (${{ matrix.arch }})
+      # ---- 形态 3: 单文件框架依赖 (需装 .NET Desktop Runtime) ----
+      - name: Publish SingleFile FrameworkDependent
         run: |
-          dotnet publish ClickSimulator.csproj -c Release -r ${{ matrix.arch }} --self-contained false -p:PublishSingleFile=true -p:DebugType=None -p:DebugSymbols=false -o publish/single-fwdep/${{ matrix.arch }}
+          dotnet publish ClickSimulator.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -p:DebugType=None -p:DebugSymbols=false -o publish/single-fwdep
 
-      # ---- 形态 4: 文件夹框架依赖 (常规多文件版) ----
-      - name: Publish Folder FrameworkDependent (${{ matrix.arch }})
+      # ---- 形态 4: 文件夹框架依赖 (体积最小，常规多文件版) ----
+      - name: Publish Folder FrameworkDependent
         run: |
-          dotnet publish ClickSimulator.csproj -c Release -r ${{ matrix.arch }} --self-contained false -p:DebugType=None -p:DebugSymbols=false -o publish/folder-fwdep/${{ matrix.arch }}
+          dotnet publish ClickSimulator.csproj -c Release -r win-x64 --self-contained false -p:DebugType=None -p:DebugSymbols=false -o publish/folder-fwdep
 
       - name: Package
         shell: pwsh
         run: |
           $version = $env:GITHUB_REF_NAME
-          $arch = "${{ matrix.arch }}"
-          $archShort = $arch.Replace("win-", "")
 
           # 形态 1: 单文件自包含 → 直接传 exe + 打包 zip
-          Compress-Archive -Path "publish/single-self/$arch/*" -DestinationPath "ClickSimulator-$version-$archShort-single-self.zip"
-          Copy-Item "publish/single-self/$arch/ClickSimulator.exe" "ClickSimulator-$version-$archShort-single-self.exe"
+          Compress-Archive -Path "publish/single-self/*" -DestinationPath "ClickSimulator-$version-win-x64-single-self.zip"
+          Copy-Item "publish/single-self/ClickSimulator.exe" "ClickSimulator-$version-win-x64-single-self.exe"
 
           # 形态 2: 文件夹自包含 → zip
-          Compress-Archive -Path "publish/folder-self/$arch/*" -DestinationPath "ClickSimulator-$version-$archShort-folder-self.zip"
+          Compress-Archive -Path "publish/folder-self/*" -DestinationPath "ClickSimulator-$version-win-x64-folder-self.zip"
 
           # 形态 3: 单文件框架依赖 → 直接传 exe + 打包 zip
-          Compress-Archive -Path "publish/single-fwdep/$arch/*" -DestinationPath "ClickSimulator-$version-$archShort-single-fwdep.zip"
-          Copy-Item "publish/single-fwdep/$arch/ClickSimulator.exe" "ClickSimulator-$version-$archShort-single-fwdep.exe"
+          Compress-Archive -Path "publish/single-fwdep/*" -DestinationPath "ClickSimulator-$version-win-x64-single-fwdep.zip"
+          Copy-Item "publish/single-fwdep/ClickSimulator.exe" "ClickSimulator-$version-win-x64-single-fwdep.exe"
 
           # 形态 4: 文件夹框架依赖 → zip
-          Compress-Archive -Path "publish/folder-fwdep/$arch/*" -DestinationPath "ClickSimulator-$version-$archShort-folder-fwdep.zip"
+          Compress-Archive -Path "publish/folder-fwdep/*" -DestinationPath "ClickSimulator-$version-win-x64-folder-fwdep.zip"
 
       - name: Upload to Release
         uses: softprops/action-gh-release@v2

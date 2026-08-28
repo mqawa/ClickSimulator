@@ -1,6 +1,6 @@
 # ClickSimulator
 
-一个基于 .NET 8 (WinForms) 的鼠标键盘自动化模拟器。支持录制鼠标键盘操作、编辑脚本，并通过全局热键执行/停止。
+一个基于 .NET 10 (WinForms) 的鼠标键盘自动化模拟器。支持录制鼠标键盘操作、编辑脚本，并通过全局热键执行/停止。
 
 ## 功能特性
 
@@ -13,7 +13,7 @@
 ## 环境要求
 
 - Windows 10 / 11
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
 - 管理员权限（程序启动时自动请求 UAC 提权）
 
 ## 快速开始
@@ -34,10 +34,10 @@ dotnet run
 | ---- | ---- | ---- | ---- | ---- |
 | **单文件自包含** | `*-single-self.zip` / `.exe` | ❌ 免安装 | 最大 (~150MB) | 拿到即用，无需任何环境 |
 | **文件夹自包含** | `*-folder-self.zip` | ❌ 免安装 | 较大 | 启动更快，便于排查文件 |
-| **单文件框架依赖** | `*-single-fwdep.zip` / `.exe` | ✅ 需装 [.NET Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/8.0) | 较大 (~150MB) | 单文件分发，机器已装运行时 |
+| **单文件框架依赖** | `*-single-fwdep.zip` / `.exe` | ✅ 需装 [.NET Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) | 较大 (~150MB) | 单文件分发，机器已装运行时 |
 | **文件夹框架依赖** | `*-folder-fwdep.zip` | ✅ 需装 .NET Desktop Runtime | 最小 (~1MB) | 体积敏感，常规多文件部署 |
 
-**架构**：`x64`（Intel/AMD 主流）与 `arm64`（ARM 设备）。
+**架构**：`x64`（Intel/AMD 主流）。
 
 > 提示：所有形态均包含 `scripts/` 示例脚本目录。WinForms 的单文件发布（无论是否自包含）体积都较大，因为会嵌入原生库；若追求最小体积，请选 **文件夹框架依赖版**（需机器已装 .NET Desktop Runtime）；否则选**自包含版**最省心（免安装）。
 
