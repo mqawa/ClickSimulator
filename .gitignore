@@ -1,0 +1,30 @@
+# 构建产物
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio / Rider
+.vs/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# NuGet
+*.nupkg
+packages/
+!**/packages/build/
+*.snupkg
+
+# 发布输出
+publish/
+[Pp]ublish/
+
+# 个人业务脚本（公开仓库只保留示例）
+/scripts/*.txt
+!/scripts/sample.txt
+
+# 运行时生成的录制文件
+config/

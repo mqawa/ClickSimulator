@@ -1,0 +1,53 @@
+#repeat 1
+# #repeat 指令: 控制脚本执行次数, -1 = 无限循环
+# 示例脚本：演示各种操作命令
+# 支持的命令格式：
+
+# 鼠标移动（绝对坐标）
+MoveTo 1066, 634
+MoveTo 1068, 721
+
+# 延迟（毫秒）
+Delay 500
+
+# 鼠标右键按下/抬起/点击（参数为点击次数，默认1次）
+RightDown 1
+Delay 64
+RightUp
+RightClick 1
+
+# 鼠标左键
+MoveTo 841, 275
+Delay 500
+LeftClick 1
+
+MoveTo 758, 557
+Delay 500
+LeftClick 1
+
+MoveTo 780, 618
+Delay 500
+LeftClick 1
+
+# 滚轮（正数向上滚，负数向下滚）
+Scroll 120
+
+# 等待
+Delay 1000
+
+# 左键按下/抬起（用于拖拽）
+LeftDown
+MoveTo 500, 500
+LeftUp
+
+# 相对移动
+MoveRelative 100, 0
+Delay 200
+MoveRelative -100, 0
+
+# 键盘操作
+KeyPress A
+Delay 200
+KeyPress Enter
+Delay 200
+KeyPress Tab
