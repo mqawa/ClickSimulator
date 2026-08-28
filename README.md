@@ -26,10 +26,37 @@ dotnet build
 dotnet run
 ```
 
-发布单文件可执行程序：
+## 下载与发布形态
+
+发布版本通过 GitHub Actions 在每次 **Release 发布时自动构建**（也可在 Actions 页面手动触发），产物附加到 Release 的 **Assets** 中。每个版本提供 **2 种架构 × 4 种形态**，按需选择：
+
+| 形态 | 文件 | 是否需要安装 .NET | 体积 | 适用场景 |
+| ---- | ---- | ---- | ---- | ---- |
+| **单文件自包含** | `*-single-self.zip` / `.exe` | ❌ 免安装 | 最大 (~150MB) | 拿到即用，无需任何环境 |
+| **文件夹自包含** | `*-folder-self.zip` | ❌ 免安装 | 较大 | 启动更快，便于排查文件 |
+| **单文件框架依赖** | `*-single-fwdep.zip` / `.exe` | ✅ 需装 [.NET Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/8.0) | 较大 (~150MB) | 单文件分发，机器已装运行时 |
+| **文件夹框架依赖** | `*-folder-fwdep.zip` | ✅ 需装 .NET Desktop Runtime | 最小 (~1MB) | 体积敏感，常规多文件部署 |
+
+**架构**：`x64`（Intel/AMD 主流）与 `arm64`（ARM 设备）。
+
+> 提示：所有形态均包含 `scripts/` 示例脚本目录。WinForms 的单文件发布（无论是否自包含）体积都较大，因为会嵌入原生库；若追求最小体积，请选 **文件夹框架依赖版**（需机器已装 .NET Desktop Runtime）；否则选**自包含版**最省心（免安装）。
+
+### 本地手动发布
+
+所有形态也可在本地用 `dotnet publish` 手动生成：
 
 ```powershell
+# 形态 1: 单文件自包含
 dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true
+
+# 形态 2: 文件夹自包含
+dotnet publish -c Release -r win-x64 --self-contained true
+
+# 形态 3: 单文件框架依赖
+dotnet publish -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true
+
+# 形态 4: 文件夹框架依赖
+dotnet publish -c Release -r win-x64 --self-contained false
 ```
 
 ## 全局热键
